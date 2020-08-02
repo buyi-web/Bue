@@ -13,15 +13,29 @@
     </div>
     <!-- <script crossorigin="anonymous" integrity="sha384-g92AC94PwdsWZaIpD8bGSldDkIAgSf0X7tZ5Isd6rNXbjILE0EU6vrlj+gWPDMyY" src="https://lib.baomitu.com/vue/2.6.11/vue.common.dev.js"></script> -->
     <script type="module">
-      import Bue from "./core/index.js";
+      import Bue from './core/index.js'
       // es6模块中变量在外部访问不到，挂载window上
       window.vm = new Bue({
-        el: "#app",
+        el: '#app',
         data: {
-          title: "buyi",
-          content: "buyi is a handsome boy",
+          title: 'buyi',
+          content: 'buyi is a handsome boy',
+          obj: {
+            x: 1,
+            y: 2,
+          },
+          list: [
+            {
+              name: 'panad',
+              age: 18,
+            },
+            {
+              name: 'monkey',
+              age: 20,
+            },
+          ],
         },
-      });
+      })
     </script>
   </body>
 </html>
