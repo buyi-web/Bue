@@ -8,7 +8,6 @@ export function ininMount(Bue){
 }
 
 export function mount(vm, el){
-  console.log('mount', el);
   vm._vNode = constructVNode(vm, el, null)
 }
 
