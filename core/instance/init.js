@@ -1,5 +1,5 @@
 import { constructProxy } from './proxy.js'
-import {mount} from './mount.js'
+import { mount } from './mount.js'
 let uid = 0
 export function initMinix(Bue) {
   Bue.prototype._init = function (options) {

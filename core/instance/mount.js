@@ -10,11 +10,9 @@ export function ininMount(Bue) {
 }
 
 export function mount(vm, el) {
-  vm._vNode = constructVNode(vm, el, null)
+  vm._vnode = constructVNode(vm, el, null)
   // 进行预备渲染
-  prepareRender(vm, vm._vNode)
-  console.log(getTemplate2VnodeMap());
-  console.log(getVnode2TemplateMap());
+  prepareRender(vm, vm._vnode)
 }
 
 // 构建虚拟节点
