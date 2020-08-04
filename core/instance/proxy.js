@@ -34,7 +34,6 @@ function constructObjectProxy(vm, obj, namespace) {
         return obj[prop]
       },
       set(val) {
-        console.log(getNameSpace(namespace, prop))
         obj[prop] = val
       },
     })

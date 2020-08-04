@@ -1,7 +1,7 @@
 export default class VNode {
   constructor(
-    tag, // 标签类型：DIV,SPAN,INPUT, #TEXT
-    ele, // 真实节点
+    tag, // 标签类型：DIV,SPAN,INPUT, #text
+    el, // 真实节点
     children, // 当前节点下的子节点
     text, // 当前节点下的文本
     data, // VNodeData，暂时保留，暂无意义
@@ -9,7 +9,7 @@ export default class VNode {
     nodeType // 节点类型
   ) {
     this.tag = tag
-    this.ele = ele
+    this.el = el
     this.children = children
     this.text = text
     this.data = data
