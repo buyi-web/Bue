@@ -1,3 +1,5 @@
+import { getObjectVal } from "../util/objectUtil.js"
+
 //通过模板找那些节点用到了该模板
 let template2Vnode = new Map()
 //通过节点找哪些模板用到了该节点
@@ -9,6 +11,12 @@ export function renderMinix(Bue) {
   }
 }
 
+//数据变化后的节点渲染
+export function renderData(){
+
+}
+
+//渲染节点
 function renderNode(vm, vnode){
   if(vnode.nodeType == 3){
     //文本节点
@@ -20,8 +28,13 @@ function renderNode(vm, vnode){
          *vm._data: 来自Bue里data中的属性
          * vnode.env：来自父级节点中的值 例：v-for:item in list 中的item
          */
-        let templateRenderVal = getTemplateRenderVal([vm._data, vnode.env], template[i])
+        let templateRenderVal = getTemplateRenderVal([vm._data, vnode.env], templates[i])
+        if(templateRenderVal) {
+          let reg = new RegExp('{{[\\s]*'+ templates[i] +'[\\s]*}}', 'g')
+          result = result.replace(reg, templateRenderVal) //将{{ }}中的值替换
+        }
       }
+      vnode.el.nodeValue = result
     }
   }else{
     for (let i = 0; i < vnode.children.length; i++) {
@@ -30,11 +43,15 @@ function renderNode(vm, vnode){
   }
 }
 
+// 获取模板中需要渲染的页面上的值
 function getTemplateRenderVal(dataObjs, template){
   for (let i = 0; i < dataObjs.length; i++) {
-    dataObjs[i];
-
+    let temp = getObjectVal(dataObjs[i], template)
+    if(temp){
+      return temp
+    }
   }
+  return null
 }
 // 预渲染
 export function prepareRender(vm, vnode) {
