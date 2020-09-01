@@ -13,6 +13,12 @@ export function initMinix(Bue) {
     }
     // 初始化created
     // 初始化methods
+    if(options && options.methods){
+      vm._methods = options.methods
+      for (const func in options.methods) {
+        vm[func] = options.methods[func]
+      }
+    }
     // 初始化computed
     // 初始化el并挂载
     if (options && options.el) {

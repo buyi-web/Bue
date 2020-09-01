@@ -12,8 +12,13 @@ export function renderMinix(Bue) {
 }
 
 //数据变化后的节点渲染
-export function renderData(){
-
+export function renderData(vm, data){
+  let vnodes = template2Vnode.get(data)
+  if(vnodes != null){
+    for (let i = 0; i < vnodes.length; i++) {
+      renderNode(vm, vnodes[i])
+    }
+  }
 }
 
 //渲染节点
@@ -29,14 +34,25 @@ function renderNode(vm, vnode){
          * vnode.env：来自父级节点中的值 例：v-for:item in list 中的item
          */
         let templateRenderVal = getTemplateRenderVal([vm._data, vnode.env], templates[i])
-        if(templateRenderVal) {
+        if(templateRenderVal != null) {
           let reg = new RegExp('{{[\\s]*'+ templates[i] +'[\\s]*}}', 'g')
           result = result.replace(reg, templateRenderVal) //将{{ }}中的值替换
         }
       }
       vnode.el.nodeValue = result
     }
-  }else{
+  } else if(vnode.nodeType == 1 && vnode.tag == 'INPUT'){
+    // input标签v-model
+    let templates = vnode2Template.get(vnode);
+    if(templates){
+      for (let i = 0; i < templates.length; i++) {
+        let templateRenderVal = getTemplateRenderVal([vm._data, vnode.env], templates[i])
+        if(templateRenderVal != null){
+          vnode.el.value = templateRenderVal
+        }
+      }
+    }
+  } else{
     for (let i = 0; i < vnode.children.length; i++) {
       renderNode(vm, vnode.children[i])
     }
@@ -47,7 +63,7 @@ function renderNode(vm, vnode){
 function getTemplateRenderVal(dataObjs, template){
   for (let i = 0; i < dataObjs.length; i++) {
     let temp = getObjectVal(dataObjs[i], template)
-    if(temp){
+    if(temp != null){
       return temp
     }
   }
@@ -58,16 +74,21 @@ export function prepareRender(vm, vnode) {
   if (vnode == null) {
     return
   }
+  analysisAttr(vm, vnode)
   if (vnode.nodeType == 3) {
     // 文本节点
     analysisTemplateString(vnode)
   }
-  if (vnode.nodeType == 1) {
-    // 标签
-    for (let i = 0; i < vnode.children.length; i++) {
-      prepareRender(vm, vnode.children[i])
-    }
+  if(vnode.nodeType == 0){
+    // 虚拟节点
+    setTemplate2Vnode(vnode.data, vnode)
+    setVnode2Template(vnode.data, vnode)
   }
+
+  for (let i = 0; i < vnode.children.length; i++) {
+    prepareRender(vm, vnode.children[i])
+  }
+
 }
 
 function analysisTemplateString(vnode) {
@@ -117,4 +138,24 @@ export function getTemplate2VnodeMap(){
 
 export function getVnode2TemplateMap(){
   return vnode2Template
+}
+
+//分析节点中的属性(指令)
+function analysisAttr(vm, vnode){
+  if(vnode.nodeType == 1){
+    let attrs = vnode.el.getAttributeNames()
+    if(attrs.includes("v-model")){
+      setTemplate2Vnode(vnode.el.getAttribute('v-model'), vnode)
+      setVnode2Template(vnode.el.getAttribute('v-model'), vnode)
+    }
+  }
+}
+
+export function getVNodeByTemplate(template){
+  return template2Vnode.get(template);
+}
+
+export function clearMap(){
+  template2Vnode.clear();
+  vnode2Template.clear()
 }

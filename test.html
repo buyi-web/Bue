@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-
+  <style>
+    img{
+      width: 200px;
+    }
+    .red{
+      color: red
+    }
+    .blue{
+      color: blue
+    }
+    .bgyellow{
+      background: yellow;
+    }
+    .bggreen{
+      background: greenyellow;
+    }
+  </style>
   <body>
     <div id="app">
-      <p>你好，{{ title }}, {{ content  }}</p>
+      <div @click="numAdd">{{ num }} ++</div>
+      <p v-on:click="concole">你好，{{ title }}, {{ content  }}</p>
       <p>{{ content  }} {{obj.x}}</p>
+      <input type="text" v-model="love"> {{love}}
+      <ul>
+        <li v-for="key in list">
+          姓名：{{ key.name }}
+          年龄：{{ key.age }}
+        </li>
+      </ul>
+      <img v-bind:src="imgSrc" alt="">
+      <div :class="color1">江上酒 故人倾</div>
+      <div :class="{blue: obj.x < 2, bgyellow: obj.y == 2}">叶成帷 花如锦</div>
+      <div :class="{red: obj.y == 2, bggreen}">疏影横斜 暗香浮动</div>
     </div>
     <!-- <script crossorigin="anonymous" integrity="sha384-g92AC94PwdsWZaIpD8bGSldDkIAgSf0X7tZ5Isd6rNXbjILE0EU6vrlj+gWPDMyY" src="https://lib.baomitu.com/vue/2.6.11/vue.common.dev.js"></script> -->
     <script type="module">
@@ -18,8 +46,10 @@
       window.vm = new Bue({
         el: '#app',
         data: {
+          num: 0,
           title: 'buyi',
           content: 'buyi is a handsome boy',
+          love: 'wanzi',
           obj: {
             x: 1,
             y: 2,
@@ -34,7 +64,20 @@
               age: 20,
             },
           ],
+          imgSrc: 'smile.jpg',
+          color1: 'red',
+          color2: 'blue',
+          bg1: 'bgyellow',
+          bg2: 'bggreen'
         },
+        methods: {
+          numAdd(){
+            this.number ++;
+          },
+          concole(){
+            console.log(666)
+          }
+        }
       })
     </script>
   </body>

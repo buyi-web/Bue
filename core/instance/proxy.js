@@ -1,3 +1,5 @@
+import { renderData } from "./render.js"
+import { rebuild } from "./mount.js"
 const arrayProto = Array.prototype
 
 /**
@@ -35,6 +37,7 @@ function constructObjectProxy(vm, obj, namespace) {
       },
       set(val) {
         obj[prop] = val
+        renderData(vm, getNameSpace(namespace, prop))
       },
     })
 
@@ -47,6 +50,7 @@ function constructObjectProxy(vm, obj, namespace) {
       set(val) {
         console.log(prop)
         obj[prop] = val
+        renderData(vm, getNameSpace(namespace, prop))
       }
     })
     if (obj[prop] instanceof Object) {
@@ -84,7 +88,8 @@ function defArrayFunc(obj, func, namespace, vm) {
     value(...arg) {
       let original = arrayProto[func]
       const result = original.apply(this, arg)
-      console.log(namespace, '')
+      rebuild(vm, getNameSpace(namespace, ""))
+      renderData(vm, getNameSpace(namespace, ""))
       return result
     },
   })
