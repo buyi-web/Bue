@@ -72,11 +72,17 @@
         },
         methods: {
           numAdd(){
-            this.number ++;
+            this.num ++;
           },
           concole(){
             console.log(666)
           }
+        },
+        created(){
+          console.log('create over : data.title = ' + this.title)
+        },
+        mounted(){
+          console.log('mount over')
         }
       })
     </script>

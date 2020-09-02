@@ -1,5 +1,6 @@
 import { renderData } from "./render.js"
 import { rebuild } from "./mount.js"
+import { getObjectVal } from "../util/objectUtil.js"
 const arrayProto = Array.prototype
 
 /**
@@ -48,8 +49,11 @@ function constructObjectProxy(vm, obj, namespace) {
         return obj[prop]
       },
       set(val) {
-        console.log(prop)
         obj[prop] = val
+        let data = getObjectVal(vm._data, getNameSpace(namespace, prop))
+        if(data instanceof Array){
+          rebuild(vm, getNameSpace(namespace, prop));
+        }
         renderData(vm, getNameSpace(namespace, prop))
       }
     })
